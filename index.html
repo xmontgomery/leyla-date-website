@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Für Leyla - Date Anfrage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(255, 117, 140, 0.92), rgba(255, 126, 179, 0.88)),
+        url("https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1600&q=80") center / cover fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      overflow-x: hidden;
+      color: #2d1f2f;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      color: #fff;
+      opacity: 0.72;
+      animation: float 8s linear infinite;
+      text-shadow: 0 6px 18px rgba(134, 25, 76, 0.22);
+    }
+
+    @keyframes float {
+      from { transform: translateY(100vh) rotate(0deg); }
+      to { transform: translateY(-120px) rotate(18deg); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 860px;
+      z-index: 2;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 8px;
+      padding: clamp(22px, 5vw, 42px);
+      box-shadow: 0 22px 58px rgba(95, 21, 55, 0.28);
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      text-align: center;
+      color: #0f7b63;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      color: #d6336c;
+      line-height: 1.08;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #5e4c61;
+      margin: 14px auto 26px;
+      max-width: 560px;
+      line-height: 1.55;
+    }
+
+    .question {
+      margin-top: 26px;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+      color: #2d1f2f;
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+    }
+
+    .button-group,
+    .action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn,
+    .submit-btn,
+    .whatsapp-btn,
+    .screenshot-btn {
+      border: none;
+      min-height: 48px;
+      padding: 13px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .btn:hover,
+    .submit-btn:hover,
+    .whatsapp-btn:hover,
+    .screenshot-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.02);
+    }
+
+    .yes {
+      background: #12b886;
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(18, 184, 134, 0.28);
+    }
+
+    .no {
+      background: #e03131;
+      color: #fff;
+      position: relative;
+      box-shadow: 0 10px 24px rgba(224, 49, 49, 0.23);
+    }
+
+    .whatsapp-btn {
+      background: #25d366;
+      color: #073b1d;
+      width: 100%;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .option {
+      background: #fff6f8;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #ffd1df;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+    }
+
+    .option:hover {
+      background: #ffe3ec;
+      transform: translateY(-1px);
+    }
+
+    .option:has(input:checked) {
+      background: #d3f9d8;
+      border-color: #8ce99a;
+      box-shadow: 0 8px 20px rgba(18, 184, 134, 0.16);
+    }
+
+    .option input[type="checkbox"] {
+      margin-right: 9px;
+      cursor: pointer;
+      accent-color: #12b886;
+    }
+
+    input[type="date"],
+    input[type="time"],
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #f1d4df;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #2d1f2f;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 24px;
+      background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(255, 77, 109, 0.28);
+    }
+
+    .result {
+      margin-top: 24px;
+      background: #fff5fa;
+      border: 2px solid #ffd1e6;
+      border-radius: 8px;
+      padding: 22px;
+      line-height: 1.65;
+    }
+
+    .notice {
+      margin: 14px 0;
+      text-align: center;
+      font-weight: 700;
+      color: #0f7b63;
+    }
+
+    .screenshot-btn {
+      width: 100%;
+      margin-top: 10px;
+      background: #364fc7;
+      color: #fff;
+    }
+
+    .small-note {
+      margin-top: 12px;
+      color: #6f5f73;
+      font-size: 0.92rem;
+      text-align: center;
+      line-height: 1.45;
+    }
+
+    .burst {
+      position: fixed;
+      font-size: 28px;
+      animation: loveBurst 2s forwards;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    @keyframes loveBurst {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-250px) scale(1.8); }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 14px;
+        align-items: flex-start;
+      }
+
+      .card {
+        margin: 12px 0;
+      }
+
+      .button-group,
+      .action-row {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <main class="container">
+    <section class="card" id="captureArea">
+      <p class="eyebrow">Für Leyla</p>
+      <h1>❤️ Date Anfrage</h1>
+      <p class="subtitle">Willst du mit mir ausgehen? Such dir aus, worauf du Lust hast, und schick mir deine Antwort direkt per WhatsApp.</p>
+
+      <div class="question">
+        <div class="button-group">
+          <button class="btn yes" type="button" onclick="showForm(); heartBurst();">Ja ❤️</button>
+          <button class="btn no" id="noBtn" type="button">Nein 💔</button>
+        </div>
+      </div>
+
+      <div id="formSection" style="display:none;">
+        <div class="question">
+          <h2>Was machen wir?</h2>
+          <div class="options">
+            <label class="option"><input type="checkbox" value="Pizza">Pizza 🍕</label>
+            <label class="option"><input type="checkbox" value="Pasta">Pasta 🍝</label>
+            <label class="option"><input type="checkbox" value="Zusammen kochen">Zusammen kochen 🍳</label>
+            <label class="option"><input type="checkbox" value="Spazieren">Spazieren 🌳</label>
+            <label class="option"><input type="checkbox" value="Café">Café ☕</label>
+            <label class="option"><input type="checkbox" value="Kino">Kino 🎬</label>
+          </div>
+        </div>
+
+        <div class="question">
+          <h2>Wann?</h2>
+          <input type="date" id="date" aria-label="Datum auswählen">
+          <input type="time" id="time" aria-label="Uhrzeit auswählen">
+        </div>
+
+        <div class="question">
+          <h2>Nachricht</h2>
+          <textarea id="msg" placeholder="Schreib hier eine süße Antwort rein..."></textarea>
+        </div>
+
+        <button class="submit-btn" type="button" onclick="submitDate()">Date absenden ❤️</button>
+        <div id="result"></div>
+      </div>
+
+      <div class="question">
+        <a class="whatsapp-btn" id="sharePageBtn" target="_blank" rel="noopener">Diese Seite per WhatsApp teilen</a>
+        <p class="small-note" id="shareHint"></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const sharePageBtn = document.getElementById("sharePageBtn");
+    const shareHint = document.getElementById("shareHint");
+
+    function currentPageText() {
+      const isOnline = location.protocol === "http:" || location.protocol === "https:";
+      if (!isOnline) {
+        shareHint.textContent = "Wenn die Datei auf einer öffentlichen Webseite liegt, verschickt WhatsApp automatisch den richtigen Link.";
+        return "Für Leyla ❤️ Ich habe eine kleine Date-Anfrage für dich vorbereitet.";
+      }
+
+      shareHint.textContent = "Der WhatsApp-Link enthält diese öffentliche Webseite.";
+      return "Für Leyla ❤️ Öffne meine kleine Date-Anfrage hier: " + location.href;
+    }
+
+    function updateShareLink() {
+      sharePageBtn.href = "https://wa.me/?text=" + encodeURIComponent(currentPageText());
+    }
+
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = 15 + Math.random() * 25 + "px";
+      document.getElementById("hearts").appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }, 500);
+
+    noBtn.addEventListener("mouseenter", () => {
+      noBtn.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 80 - 40}px)`;
+    });
+
+    noBtn.addEventListener("click", () => {
+      noBtn.textContent = "Doch lieber Ja? ❤️";
+      noBtn.style.transform = "translate(0, 0)";
+    });
+
+    function showForm() {
+      document.getElementById("formSection").style.display = "block";
+      document.getElementById("formSection").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function heartBurst() {
+      for (let i = 0; i < 25; i++) {
+        const h = document.createElement("div");
+        h.className = "burst";
+        h.innerHTML = "❤️";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.top = "60vh";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 2000);
+      }
+    }
+
+    function buildSummary() {
+      const selected = [...document.querySelectorAll("input[type=checkbox]:checked")].map((item) => item.value);
+      const date = document.getElementById("date").value || "noch offen";
+      const time = document.getElementById("time").value || "noch offen";
+      const message = document.getElementById("msg").value.trim() || "Ich freue mich ❤️";
+      const activities = selected.length ? selected.join(", ") : "Überrasch mich";
+
+      return {
+        activities,
+        date,
+        time,
+        message,
+        whatsappText: `Für Leyla ❤️\n\nMeine Date-Antwort:\nWas: ${activities}\nDatum: ${date}\nZeit: ${time}\nNachricht: ${message}`
+      };
+    }
+
+    function submitDate() {
+      const summary = buildSummary();
+
+      document.getElementById("result").innerHTML = `
+        <div class="result">
+          <h2>❤️ Deine Date Antwort</h2>
+          <p><b>Aktivitäten:</b> ${escapeHtml(summary.activities)}</p>
+          <p><b>Datum:</b> ${escapeHtml(summary.date)}</p>
+          <p><b>Zeit:</b> ${escapeHtml(summary.time)}</p>
+          <p><b>Nachricht:</b> ${escapeHtml(summary.message)}</p>
+          <div class="notice">Jetzt direkt per WhatsApp schicken.</div>
+          <div class="action-row">
+            <a class="whatsapp-btn" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(summary.whatsappText)}">Antwort per WhatsApp öffnen</a>
+            <button class="screenshot-btn" type="button" onclick="shot()">Screenshot erstellen</button>
+          </div>
+        </div>
+      `;
+
+      if (window.confetti) {
+        confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+      }
+    }
+
+    function shot() {
+      if (!window.html2canvas) {
+        alert("Screenshot-Funktion konnte nicht geladen werden.");
+        return;
+      }
+
+      html2canvas(document.getElementById("captureArea"), { useCORS: true, backgroundColor: null }).then((canvas) => {
+        const a = document.createElement("a");
+        a.download = "date-fuer-leyla.png";
+        a.href = canvas.toDataURL();
+        a.click();
+      }).catch(() => {
+        alert("Der Screenshot konnte nicht erstellt werden. Du kannst stattdessen den WhatsApp-Button nutzen.");
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    updateShareLink();
+  </script>
+</body>
+</html>
